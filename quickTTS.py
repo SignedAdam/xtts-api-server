@@ -58,12 +58,12 @@ def convert_text_to_multiple_audio(id, text, voice_models, language="en"):
     # Convert text to audio for multiple voice models
     audio_paths = []
     for voice_model in voice_models:
-        save_path = f"{id}/{voice_model}_output.wav"
+        save_path = f"output/{id}/{voice_model}_output.wav"
         convert_text_to_audio(text, voice_model, language, save_path)
         audio_paths.append(save_path)
     return audio_paths
 
-def merge_audio_files(audio_paths, output_path="merged_output.wav"):
+def merge_audio_files(audio_paths, output_path="output/merged_output.wav"):
     from pydub import AudioSegment
     merged_audio = AudioSegment.empty()
     for audio_path in audio_paths:
@@ -71,8 +71,7 @@ def merge_audio_files(audio_paths, output_path="merged_output.wav"):
         merged_audio += audio
     merged_audio.export(output_path, format="wav")
 
-
-def merge_audio_files_into_each_other(audio_paths, output_path="merged_output.wav"):
+def merge_audio_files_into_each_other(audio_paths, output_path="output/merged_output.wav"):
     first_audio = AudioSegment.from_wav(audio_paths[0])
     for audio_path in audio_paths[1:]:
         next_audio = AudioSegment.from_wav(audio_path)
@@ -81,7 +80,7 @@ def merge_audio_files_into_each_other(audio_paths, output_path="merged_output.wa
     first_audio.export(output_path, format="wav")
 
 
-def convert_text_to_audio(text, voice_model, language = "en", save_path = "output.wav"):
+def convert_text_to_audio(text, voice_model, language = "en", save_path = "output/output.wav"):
     # Make a POST request to the TTS server to convert text to audio
     url = "http://127.0.0.1:8020/tts_to_audio/"
     payload = {
