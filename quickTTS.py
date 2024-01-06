@@ -11,10 +11,24 @@ def main():
         return
     
     text = sys.argv[1]
-    voice_model = next((arg.split('=')[1] for arg in sys.argv if arg.startswith('--voice=')), "female.wav")
-    language = next((arg.split('=')[1] for arg in sys.argv if arg.startswith('--language=')), "en")
-    all_merge = next((arg.split('=')[1] for arg in sys.argv if arg.startswith('--am=')), False)
+    voice_model = "female.wav"
+    language = "en"
+    all_merge = False
     id = str(uuid.uuid4())[:8]
+
+    for arg in sys.argv:
+        if arg.startswith('--voice='):
+            voice_model = arg.split('=')[1] or voice_model
+        elif arg.startswith('--language='):
+            language = arg.split('=')[1] or language
+        elif arg.startswith('--am='):
+            all_merge = arg.split('=')[1] or all_merge
+
+    print(f"Text: {text}")
+    print(f"Voice Model: {voice_model}")
+    print(f"Language: {language}")
+    print(f"All Merge: {all_merge}")
+    print(f"ID: {id}")
 
     all_voice_models = [
         "calm_female.wav",
@@ -23,19 +37,22 @@ def main():
     ]
 
     if all_merge:
-
+        # little experiment with merging AI voices
         os.makedirs(id, exist_ok=True)
         paths = convert_text_to_multiple_audio(id, text, all_voice_models, language)
 
-        first_part = f"{id}/output.wav"
-        merge_audio_files(paths, first_part)
+        # merge the audio files but append them to each other
+        first_part_path = f"{id}/output.wav"
+        merge_audio_files(paths, first_part_path)
 
-        second_part = f"{id}/output2.wav"
-        merge_audio_files_into_each_other(paths, second_part)
+        # actually merge the audio files into each other without appending
+        second_part_path = f"{id}/output2.wav"
+        merge_audio_files_into_each_other(paths, second_part_path)
 
-        merge_audio_files([first_part, second_part], f"{id}_final_am.wav")
+        # merge the two audio files (appended + merged) after each other for effect
+        merge_audio_files([first_part_path, second_part_path], f"output/{id}_final_am.wav")
     else:
-        convert_text_to_audio(id, text, voice_model, language)
+        convert_text_to_audio(text, voice_model, language, f"output/{id}_output.wav")
 
 def convert_text_to_multiple_audio(id, text, voice_models, language="en"):
     # Convert text to audio for multiple voice models

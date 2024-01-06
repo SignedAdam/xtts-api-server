@@ -1,3 +1,63 @@
+# Quick xTTS
+
+Using the xtts api server as a stepping stone for a future project
+
+## Installation
+
+Git clone the project
+
+```bash
+git clone https://github.com/SignedAdam/xtts-api-server.git
+```
+
+Install python dependencies with `pip`
+
+```bash
+pip install -r requirements.txt
+```
+
+## Usage
+
+#### start the xtts server
+
+```bash
+make start-xtts-server
+```
+
+  _if you are on a desktop computer with a GPU, you can use deepspeed. Use `start-xtts-server-ds` (it's faster)_
+
+#### Generate transcriptions
+
+(in a new terminal window)
+
+```bash
+python quickTTS.py "some text"
+```
+
+Add `--language=ru` and `--voice=voice_audio.wav` to change the language or voice model respectively.
+
+Available voices: [`female.wav`, `female2.wav`, `female3.wav`, `calm_female.wav`, `male.wav`].
+
+## Adding more voices
+
+Find a very clear 10-20 second speech sample in .wav format and put it in the `/speakers` directory and use the flag.
+
+Example complete command:
+
+```bash
+python quickTTS.py "Wake up. You are in a simulation." --language=en --voice=female.wav
+```
+
+## Notes
+
+You can generate TTS in a different language than the given input string. Try for example
+
+```bash
+python quickTTS.py "Mcdonalds" --language=ja --voice=calm_female.wav
+```
+
+# OLD README
+
 # A simple FastAPI Server to run XTTSv2
 
 This project is inspired by [silero-api-server](https://github.com/ouoertheo/silero-api-server) and utilizes [XTTSv2](https://github.com/coqui-ai/TTS).
