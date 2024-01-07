@@ -42,26 +42,21 @@ def main():
         os.makedirs(f"output/{id}", exist_ok=True)
         paths = convert_text_to_multiple_audio(id, text, all_voice_models, language)
 
-        # merge the audio files but append them to each other
-        first_part_path = f"output/{id}/output.wav"
-        merge_audio_files(paths, first_part_path)
-
-        # actually merge the audio files into each other without appending
-        second_part_path = f"output/{id}/output2.wav"
+        # merge the audio files into each other
+        second_part_path = f"output/{id}_final_am.wav"
         merge_audio_files_into_each_other(paths, second_part_path)
-
-        # merge the two audio files (appended + merged) after each other for effect
-        merge_audio_files([first_part_path, second_part_path], f"output/{id}_final_am.wav")
     else:
         convert_text_to_audio(text, voice_model, language, f"output/{id}_output.wav")
 
 def convert_text_to_multiple_audio(id, text, voice_models, language="en"):
     # Convert text to audio for multiple voice models
     audio_paths = []
+    i = 0
     for voice_model in voice_models:
-        save_path = f"output/{id}/{voice_model}"
+        save_path = f"output/{id}/{i}_{voice_model}"
         convert_text_to_audio(text, voice_model, language, save_path)
         audio_paths.append(save_path)
+        i += 1
     return audio_paths
 
 def merge_audio_files(audio_paths, output_path="output/merged_output.wav"):
